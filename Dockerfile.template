@@ -1,14 +1,11 @@
-FROM       nvidia/cuda:%CUDA_VERSION%-cudnn%CUDNN_VERSION%-devel-ubuntu%UBUNTU_VERSION%
+FROM       %BASE-DOCKER%
 MAINTAINER Woobin Im "https://github.com/iwbn"
 
 RUN apt update
-RUN apt install -y gedit
 RUN apt install -y openssh-server
 RUN apt install -y xauth
 
 RUN apt install -y software-properties-common
-
-RUN echo 'root:root' |chpasswd
 
 RUN mkdir /var/run/sshd
 RUN mkdir /root/.ssh
@@ -18,22 +15,6 @@ RUN sed -i "s/^.*X11UseLocalhost.*$/X11UseLocalhost no/" /etc/ssh/sshd_config
 RUN grep "^X11UseLocalhost" /etc/ssh/sshd_config || echo "X11UseLocalhost no" >> /etc/ssh/sshd_config
 RUN sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
-
-
-#RUN apt install -y curl
-#RUN apt install -y tar
-
-#RUN curl -o pycharm.tar.gz https://download-cf.jetbrains.com/python/pycharm-community-2019.3.3.tar.gz
-#RUN mv pycharm.tar.gz /root/pycharm.tar.gz
-#RUN cd /root/ \
-#	&& tar -xvf pycharm.tar.gz \
-#	&& rm pycharm.tar.gz
-#RUN chmod +x /root/pycharm-community-2019.3.3/bin/pycharm.sh
-#RUN ln -s /root/pycharm-community-2019.3.3/bin/pycharm.sh /usr/local/bin/pycharm
-
-#RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-#RUN python3 get-pip.py
-#RUN rm get-pip.py
 
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

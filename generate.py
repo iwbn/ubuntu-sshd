@@ -14,9 +14,9 @@ with open("Dockerfile.template", 'r') as f:
 res = template.replace("%BASE-DOCKER%", args.base_image)
 
 
-name = args.base_image.split("/")[-1]
+name = args.base_image
 base_name = name.split(":")[0]
-if len(args.base_image.split(":")) > 1:
+if len(args.base_image.split(":")) == 1:
 	raise ValueError("plase give base_image name with tag")
 base_tag = args.base_image.split(":")[1]
 new_name = base_name + "-sshd" + ":" + base_tag
@@ -26,5 +26,5 @@ dir_name = new_name
 os.makedirs(dir_name, exist_ok=True)
 with open(os.path.join(dir_name, 'Dockerfile'), 'w') as f:
 	f.write(res)
-subprocess.run(['docker build -t %s .' % new_name], shell=True, check=True, cwd=dir_name)
+subprocess.run(['docker build --no-cache -t %s .' % new_name], shell=True, check=True, cwd=dir_name)
 

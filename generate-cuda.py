@@ -18,5 +18,5 @@ IMAGES = [
 ]
 
 for image in IMAGES:
-	subprocess.run(['python3 generate.py ' % image], shell=True, check=True)
+	subprocess.run(['python3 generate.py %s' % image], shell=True, check=True)
 
